@@ -1,4 +1,10 @@
-"""Finds the files under the directory that match the input regex keyword."""
+#!/usr/bin/env python3
+"""Finds the files under the directory that match the input regex keyword.
+  
+    Usage:
+        python3 findfileinrootdirectory.py -r <rootdir> -s <searchstr>
+
+"""
 
 from os import listdir, path as op
 import re
@@ -6,7 +12,7 @@ from collections import OrderedDict
 from argparse import ArgumentParser, ArgumentError
 
 def parse_commandline():
-    """parses command line arguments and returns a list
+    """Parses command line arguments and returns a list
 
     Returns :
         Namespace : Namespace object of argument parser
@@ -56,7 +62,12 @@ def parse_commandline():
 
 
 def find_files_in_root_dir(root_dir, fn_srch_regex):
-    """Finds the files present in the Dir and all the subDirs and returns a dictionary."""
+    """Finds the files present in the Dir and all the subDirs and returns a dictionary.
+
+        Args:
+            root_dir: path of the root directory
+            fn_srch_regex: filename search regular expression
+    """
 
     dir_files_dict = {}
     for (dirpath, dirnames, filenames) in os.walk(root_dir):
@@ -65,20 +76,22 @@ def find_files_in_root_dir(root_dir, fn_srch_regex):
 
 
 if __name__ == "__main__":
-    '''prints a list of directories and the number of files contained in them'''
+    """Prints a list of directories and the number of files contained in them
+
+    """
 
     try:
         parsed_args = parse_commandline()
         root_dir_path = parsed_args.rootdir
         fn_search_regex = re.compile(parsed_args.fn_search_string)
         dir_files = find_files_in_root_dir(root_dir_path, fn_search_regex)
-        print ("{" + ", ".join(" : ".join(["'" + key + "'", str(val)])
+        print("{" + ", ".join(" : ".join(["'" + key + "'", str(val)])
                                for key, val in dir_files.items()) + "}")
 
         try:
             from matplotlib.pyplot import bar
         except ImportError:
-            print "Plot is not available, Kindly install \"matplotlib\" library"
+            print("Plot is not available, Kindly install 'matplotlib' library")
         else:
             tick_label = [key for key, val in dir_files.items()]
             x_axis = xrange(1, len(tick_label) + 1)
@@ -86,5 +99,5 @@ if __name__ == "__main__":
             bar(x_axis, y_axis, tick_label=tick_label,
                 width=0.8, color=['red', 'blue'])
     except Exception as e:
-        print str("Exception occurred, reason : " + str(e))
+        print(str("Exception occurred, reason : " + str(e)))
 
