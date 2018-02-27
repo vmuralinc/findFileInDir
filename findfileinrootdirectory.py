@@ -6,7 +6,7 @@
 
 """
 
-from os import listdir, path as op
+from os import listdir, path as op, walk 
 import re
 from collections import OrderedDict
 from argparse import ArgumentParser, ArgumentError
@@ -34,7 +34,7 @@ def parse_commandline():
     fn_search_string_arg = mandatory_group.add_argument(
         "-s",
         "--searchString",
-        metavar="Path",
+        metavar="SearchRegex",
         dest="fn_search_string",
         action="store",
         help="Filename search string",
@@ -62,7 +62,8 @@ def parse_commandline():
 
 
 def find_files_in_root_dir(root_dir, fn_srch_regex):
-    """Finds the files present in the Dir and all the subDirs and returns a dictionary.
+    """Finds the files present in the Dir and all the subDirs and returns a
+       dictionary.
 
         Args:
             root_dir: path of the root directory
@@ -70,10 +71,10 @@ def find_files_in_root_dir(root_dir, fn_srch_regex):
     """
 
     dir_files_dict = {}
-    for (dirpath, dirnames, filenames) in os.walk(root_dir):
+    for (dirpath, dirnames, filenames) in walk(root_dir):
         dir_files_dict[dirpath] = len([fn for fn in filenames 
-		                               if re.match(fn_srch_regex, fn)]
-								  )
+                                       if re.match(fn_srch_regex, fn)]
+                                     )
     return OrderedDict(sorted(dir_files_dict.items()))
 
 
@@ -97,10 +98,10 @@ if __name__ == "__main__":
 			      "library")
         else:
             tick_label = [key for key, val in dir_files.items()]
-            x_axis = xrange(1, len(tick_label) + 1)
+            x_axis = range(1, len(tick_label) + 1)
             y_axis = [val for key, val in dir_files.items()]
             bar(x_axis, y_axis, tick_label=tick_label,
                 width=0.8, color=['red', 'blue'])
     except Exception as e:
-        print(str("Exception occurred, reason : " + str(e)))
+        print("Exception occurred, reason : " + str(e))
 
