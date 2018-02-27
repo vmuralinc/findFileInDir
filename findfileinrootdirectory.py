@@ -71,7 +71,9 @@ def find_files_in_root_dir(root_dir, fn_srch_regex):
 
     dir_files_dict = {}
     for (dirpath, dirnames, filenames) in os.walk(root_dir):
-        dir_files_dict[dirpath] = len([fn for fn in filenames if re.match(fn_srch_regex, fn)])
+        dir_files_dict[dirpath] = len([fn for fn in filenames 
+		                               if re.match(fn_srch_regex, fn)]
+								  )
     return OrderedDict(sorted(dir_files_dict.items()))
 
 
@@ -91,7 +93,8 @@ if __name__ == "__main__":
         try:
             from matplotlib.pyplot import bar
         except ImportError:
-            print("Plot is not available, Kindly install 'matplotlib' library")
+            print("Plot is not available, Kindly install 'matplotlib'" + 
+			      "library")
         else:
             tick_label = [key for key, val in dir_files.items()]
             x_axis = xrange(1, len(tick_label) + 1)
